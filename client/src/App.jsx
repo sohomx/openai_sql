@@ -5,6 +5,11 @@ import { useState } from 'react'
 
 function App() {
   const [queryDescription, setQueryDescription] = useState("")
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    console.log("form submitted: ", queryDescription)
+  }
    
   return (
     <main className={styles.main}>
@@ -12,7 +17,7 @@ function App() {
       <h3>generate SQL with AI</h3>
 
       {/* input box for the user */}
-      <form>
+      <form onSubmit={onSubmit}>
         <input
         type='text'
         name="query-description"
