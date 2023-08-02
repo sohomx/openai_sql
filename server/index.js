@@ -1,23 +1,28 @@
- import express from "express";
- import cors from "cors"
+import express from "express";
+import cors from "cors";
 
- const app = express();
-// parse json inside the body
-app.use(express.json())
- app.use(cors());
+const app = express();  
+app.use(cors());
 
- const port = process.env.PORT || 3005;
+const port = process.env.PORT || 3005;
 
- app.get("/", (req, res) => {
-    res.send("Hello world from our API")
- })
+import generate from "./generate.js";
 
- app.post("/generate", (req, res) => {
-    const queryDescription = req.body.queryDescription
-    console.log("received description: ", queryDescription)
-    res.json({ response: `you sent this: ${queryDescription}`})
- })
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
- app.listen(port, () => {
-    console.log(`Listening on port ${port}`)
- })
+app.listen(port, () => {
+  console.log(`Listening on port ${port}...`);
+});
+
+app.get("/generate", async (req, res) => {
+  const { prompt } = req.query;
+  try {
+    const sqlQuery = await generate(prompt);
+    res.json({ sqlQuery });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
