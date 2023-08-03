@@ -1,50 +1,45 @@
-import styles from './index.module.css'
-import sqlLogo from './assets/sql-logo.png'
+import styles from "./styles.module.css";
+import sqlServer from "./assets/sql-server.png";
+import { useState } from "react";
 
-import { useState } from 'react'
-
-function App() {
-  const [queryDescription, setQueryDescription] = useState("")
+export default function App() {
+  const [userPrompt, setUserPrompt] = useState("");
   const [sqlQuery, setSqlQuery] = useState("");
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    
-    const sqlQuery = await generateQuery()
-    setSqlQuery(generateQuery)
-  }
+    const query = await generateQuery();
+    setSqlQuery(query);
+  };
 
-  const generateQuery = async() => {
-    const response = await fetch ("http://localhost:3005/generate", {
+  const generateQuery = async () => {
+    const response = await fetch("http://localhost:3002/generate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ queryDescription: queryDescription})
-    })
+      body: JSON.stringify({ queryDescription: userPrompt }),
+    });
 
-    const data = await response.json()
-    return data.response.trim()
-  }
-   
+    const data = await response.json();
+    return data.sqlQuery.trim();
+  };
+
   return (
     <main className={styles.main}>
-      <img src={sqlLogo} alt="" className={styles.icon} />
-      <h3>generate SQL with AI</h3>
-
-      {/* input box for the user */}
+      <img src={sqlServer} className={styles.icon} alt="SQL server" />
+      <h3>Generate SQL</h3>
       <form onSubmit={onSubmit}>
         <input
-        type='text'
-        name="query-description"
-        placeholder='describe your query'
-        onChange={(e) => setQueryDescription(e.target.value)}
+          type="text"
+          name="query-description"
+          placeholder="Describe your query"
+          value={userPrompt}
+          onChange={(e) => setUserPrompt(e.target.value)}
         />
-        <input type="submit" value="generate query"/>
-        <pre>{sqlQuery}</pre>
+        <input type="submit" value="Generate query" />
       </form>
+      <pre>{sqlQuery}</pre>
     </main>
-  )
+  );
 }
-
-export default App
