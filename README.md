@@ -130,5 +130,6 @@ yarn dev
 
 [**Add Your License**](https://choosealicense.com)
 
-
+how it works:
+![WhatsApp Image 2023-10-22 at 2 02 02 PM](https://github.com/sohomx/openai_sql/assets/84140043/97471e02-8314-4d97-8a19-91416655d085)
 
